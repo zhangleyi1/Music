@@ -1,5 +1,6 @@
 package com.zly.music;
 
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -10,11 +11,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.zly.music.adapter.SelectPagerAdapter;
 import com.zly.music.fragment.NativeMusicFragment;
 import com.zly.music.fragment.OnlieMusicFragment;
+import com.zly.music.utils.PermissionManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
 
     private List<Fragment> mListFragment = new ArrayList<Fragment>();
     private SelectPagerAdapter mAdapter;
+    private PermissionManager mPermissionManager;
+    private static String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +55,24 @@ public class MainActivity extends AppCompatActivity {
         setActionBar();
         setDrawerToggle();
        // setListener();
+
+        getPermission();
+    }
+
+    private void getPermission () {
+        mPermissionManager = PermissionManager.getInstance(MainActivity.this);
+        if (!mPermissionManager.checkPermission(MainActivity.this)) {
+            Log.d(TAG, "zly --> begin requestPermission.");
+            mPermissionManager.requestPermission(MainActivity.this);
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == PermissionManager.REQUEST_PERMISSION_ALL) {
+            Log.d(TAG, "zly --> onRequestPermissionsResult success.");
+        }
     }
 
     private void initViews() {
