@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:paddingTop="5dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -16,40 +15,42 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/default_cover"
+            android:layout_marginTop="5dp"
             android:paddingRight="5dp"
+            android:paddingBottom="5dp"
             android:id="@+id/cover_iv" />
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_toRightOf="@id/cover_iv"
+            android:layout_centerVertical="true"
             android:id="@+id/ll_native_item">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="fsfdsfd"
                 android:id="@+id/music_title_tv"/>
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="fsfdsfd"
+                android:layout_height="wrap_content"
                 android:id="@+id/music_album_tv"/>
         </LinearLayout>
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="25dp"
             android:src="@drawable/ic_music_list_icon_more"
-            android:layout_gravity="right|center_vertical"
-
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:id="@+id/item_more_iv"/>
     </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_marginTop="5dp"
+        android:layout_alignParentBottom="true"
         android:background="#000000"/>
 </RelativeLayout>
