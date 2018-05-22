@@ -15,8 +15,10 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.zly.music.adapter.SelectPagerAdapter;
+import com.zly.music.bean.MusicData;
 import com.zly.music.fragment.NativeMusicFragment;
 import com.zly.music.fragment.OnlieMusicFragment;
+import com.zly.music.utils.MusicUtils;
 import com.zly.music.utils.PermissionManager;
 
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
+    private static String TAG = "MainActivity";
 
     @BindView(R.id.navigationview)
     public NavigationView mNavigationView;
@@ -42,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Fragment> mListFragment = new ArrayList<Fragment>();
     private SelectPagerAdapter mAdapter;
     private PermissionManager mPermissionManager;
-    private static String TAG = "MainActivity";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
        // setListener();
 
         getPermission();
+
+
+
     }
 
     private void getPermission () {
