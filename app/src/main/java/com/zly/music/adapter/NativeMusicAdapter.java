@@ -1,6 +1,7 @@
 package com.zly.music.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -41,10 +42,24 @@ public class NativeMusicAdapter extends RecyclerView.Adapter<NativeMusicAdapter.
 
     @Override
     public void onBindViewHolder(CustomViewHolder holder, int position) {
-        //holder.mCoverIv.setImageBitmap(mList.get(position).getBitmap());
-        holder.mTitleTv.setText(mList.get(position).getTitle());
-        holder.mAlbumTv.setText(mList.get(position).getAlbum());
+        Bitmap bm = mList.get(position).getBitmap();
+        if (null != bm) {
+            holder.mCoverIv.setImageBitmap(mList.get(position).getBitmap());
+        }
+
+        String tempStr = mList.get(position).getTitle();
+        if (!tempStr.isEmpty()) {
+            holder.mTitleTv.setText(tempStr);
+        }
+
+        tempStr = tempStr.format(mContext.getResources().getString(R.string.item_native_music_album_text),
+                mList.get(position).getArtist(), mList.get(position).getAlbum());
+        if (!tempStr.isEmpty()) {
+            holder.mAlbumTv.setText(tempStr);
+        }
+
         holder.itemView.setTag(position);
+
     }
 
     @Override

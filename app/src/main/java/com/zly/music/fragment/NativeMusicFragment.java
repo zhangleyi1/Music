@@ -44,7 +44,7 @@ public class NativeMusicFragment extends Fragment {
 
     private void initView(View view) {
         mCy = view.findViewById(R.id.cy);
-        mListMusic = MusicUtils.getMusicData(getContext());
+        mListMusic = MusicUtils.getMusicData(getContext()); //Get the all native Music
         mAdapter = new NativeMusicAdapter(getContext(), (ArrayList<MusicData>) mListMusic);
         Log.d(TAG, "zly --> NativeMusicFragment.initView list.size:" + mListMusic.size());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());

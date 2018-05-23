@@ -1,6 +1,7 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Music</string>
     <string name="testTitle">test</string>
     <string name="pager_native_music">本地音乐</string>
     <string name="pager_online_music">在线音乐</string>
+    <string name="item_native_music_album_text"><xliff:g id="artist">%s</xliff:g> - 《<xliff:g id="album">%s</xliff:g>》</string>>
 </resources>
