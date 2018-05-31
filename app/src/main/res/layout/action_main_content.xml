@@ -16,8 +16,13 @@
             android:layout_height="wrap_content"
             app:tabIndicatorHeight="0dp"
             android:id="@+id/tab_layout" />
-
     </android.support.v7.widget.Toolbar>
+
+    <Button
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="testBtn"
+        android:id="@+id/btn"/>
 
     <android.support.v4.view.ViewPager
         android:layout_width="match_parent"

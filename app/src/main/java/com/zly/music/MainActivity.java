@@ -1,5 +1,6 @@
 package com.zly.music;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -9,16 +10,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import com.zly.music.adapter.SelectPagerAdapter;
-import com.zly.music.bean.MusicData;
 import com.zly.music.fragment.NativeMusicFragment;
 import com.zly.music.fragment.OnlieMusicFragment;
-import com.zly.music.utils.MusicUtils;
 import com.zly.music.utils.PermissionManager;
 
 import java.util.ArrayList;
@@ -46,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     private SelectPagerAdapter mAdapter;
     private PermissionManager mPermissionManager;
 
+    private Button button;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +62,23 @@ public class MainActivity extends AppCompatActivity {
 
         getPermission();
 
+       /* button = (Button) findViewById(R.id.btn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "zly --> mCurrentState:" + mCurrentState);
+                if( mCurrentState == STATE_PAUSED ) {
+                    MediaControllerCompat.getMediaController(MainActivity.this).getTransportControls().play();
+                    mCurrentState = STATE_PLAYING;
+                } else {
+                    if( MediaControllerCompat.getMediaController(MainActivity.this).getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING ) {
+                        MediaControllerCompat.getMediaController(MainActivity.this).getTransportControls().pause();
+                    }
 
-
+                    mCurrentState = STATE_PAUSED;
+                }
+            }
+        });*/
     }
 
     private void getPermission () {
@@ -137,6 +153,12 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
 }

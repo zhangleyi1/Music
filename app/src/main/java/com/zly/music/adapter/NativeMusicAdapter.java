@@ -2,7 +2,6 @@ package com.zly.music.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,16 +15,15 @@ import com.zly.music.bean.MusicData;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-
 /**
  * Created by Administrator on 2018/5/22.
  */
-public class NativeMusicAdapter extends RecyclerView.Adapter<NativeMusicAdapter.CustomViewHolder> {
+public class NativeMusicAdapter extends RecyclerView.Adapter<NativeMusicAdapter.CustomViewHolder> implements View.OnClickListener {
 
     private final LayoutInflater mInflater;
     private Context mContext;
     private List<MusicData> mList;
+    private OnItemClickListener mItemClickListener;
 
     public NativeMusicAdapter(Context context, ArrayList<MusicData> list) {
         mContext = context;
@@ -33,10 +31,15 @@ public class NativeMusicAdapter extends RecyclerView.Adapter<NativeMusicAdapter.
         mInflater = LayoutInflater.from(context);
     }
 
+    public void setItemClickListener(OnItemClickListener itemClickListener) {
+        mItemClickListener = itemClickListener;
+    }
+
     @Override
     public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.native_music_item, parent, false);
         CustomViewHolder customViewHolder = new CustomViewHolder(view);
+        view.setOnClickListener(NativeMusicAdapter.this);
         return customViewHolder;
     }
 
@@ -67,6 +70,13 @@ public class NativeMusicAdapter extends RecyclerView.Adapter<NativeMusicAdapter.
         return mList.size();
     }
 
+    @Override
+    public void onClick(View v) {
+        if (null != mItemClickListener) {
+            mItemClickListener.OnItemClick((Integer)v.getTag());
+        }
+    }
+
     class CustomViewHolder extends RecyclerView.ViewHolder {
         ImageView mCoverIv;
         TextView mTitleTv;
@@ -82,4 +92,7 @@ public class NativeMusicAdapter extends RecyclerView.Adapter<NativeMusicAdapter.
         }
     }
 
+    public interface OnItemClickListener {
+        void OnItemClick(int position);
+    }
 }

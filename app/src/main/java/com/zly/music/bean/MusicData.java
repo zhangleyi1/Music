@@ -7,10 +7,9 @@ import android.os.Parcelable;
 /**
  * Created by Administrator on 2018/5/22.
  */
-
 public class MusicData implements Parcelable{
 
-    private Long id;
+    private long id;
     private int type; // 歌曲类型:本地/网络
     private long songId; // [本地]歌曲ID
     private String title; // 音乐标题
