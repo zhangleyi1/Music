@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -18,15 +18,61 @@
             android:id="@+id/tab_layout" />
     </android.support.v7.widget.Toolbar>
 
-    <Button
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:text="testBtn"
-        android:id="@+id/btn"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rl_play_control"
+        android:layout_alignParentBottom="true">
+
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/btn_play_control_list"
+            android:background="@mipmap/ic_play_bar_btn_playlist"
+            android:layout_alignParentRight="true"/>
+
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/btn_play_control_next"
+            android:background="@mipmap/ic_play_bar_btn_next"
+            android:layout_toLeftOf="@id/btn_play_control_list"/>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/btn_play_control_start"
+            android:clickable="true"
+            android:src="@drawable/play_control_start_selector"
+            android:contentDescription="@null"
+            android:layout_toLeftOf="@id/btn_play_control_next"/>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/iv_play_control"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_play_control_title"
+            android:layout_toStartOf="@id/iv_play_control"
+            android:layout_toRightOf="@id/btn_play_control_start"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_play_control_artist"
+            android:layout_alignLeft="@id/tv_play_control_title"
+            android:layout_below="@id/tv_play_control_title"
+            android:layout_toLeftOf="@id/btn_play_control_start"/>
+
+    </RelativeLayout>
 
     <android.support.v4.view.ViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:layout_above="@id/rl_play_control"
         android:id="@+id/pager"/>
-
-</LinearLayout>
+</RelativeLayout>

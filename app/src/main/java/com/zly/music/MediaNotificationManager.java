@@ -3,7 +3,6 @@ package com.zly.music;
 /**
  * Created by Administrator on 2018/5/30.
  */
-
 public class MediaNotificationManager {
 
     private static MediaNotificationManager mMediaNotificationManager;
@@ -16,7 +15,6 @@ public class MediaNotificationManager {
         }
         return mMediaNotificationManager;
     }
-
 
     private void showPlayingNotification() {
         /*NotificationCompat.Builder builder = MediaStyleHelper.from(this, mMediaSessionCompat);

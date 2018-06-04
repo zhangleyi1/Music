@@ -5,6 +5,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.RemoteException;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.MediaBrowserCompat;
@@ -18,7 +20,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.zly.music.MusicService;
 import com.zly.music.R;
@@ -45,8 +46,14 @@ public class NativeMusicFragment extends Fragment implements NativeMusicAdapter.
     private static final int STATE_PLAYING = 1;
     private Activity mActivity;
     private Context mContext;
-    private static int TYPE_ADD_MUSIC = 100;
-    private static int TYPE_DELETE_MUSIC = 101;
+    public static int TYPE_ADD_MUSIC = 100;
+    public static int TYPE_DELETE_MUSIC = 101;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            MediaControllerCompat.getMediaController(mActivity).getTransportControls().play();
+        }
+    };
 
     public NativeMusicFragment() {
         // Required empty public constructor
@@ -68,22 +75,9 @@ public class NativeMusicFragment extends Fragment implements NativeMusicAdapter.
     }
 
     private void intiData() {
-
         mMediaBrowserCompat = new MediaBrowserCompat(mContext, new ComponentName(mContext, MusicService.class),
                 mMediaBrowserCompatConnectionCallback, null);
         mMediaBrowserCompat.connect();
-
-        Button btn = new Button(mContext);
-        btn.setText("test");
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if( mCurrentState == STATE_PAUSED ) {
-                    MediaControllerCompat.getMediaController(mActivity).getTransportControls().play();
-                    mCurrentState = STATE_PLAYING;
-                }
-            }
-        });
     }
 
     private void initView(View view) {
@@ -109,7 +103,8 @@ public class NativeMusicFragment extends Fragment implements NativeMusicAdapter.
 */
         intent.putExtra("type", TYPE_ADD_MUSIC);
         intent.putExtra("data", mListMusic.get(position).getId());
-
+        Log.d(TAG, "zly --> send id:" + mListMusic.get(position).getId());
+        mHandler.sendEmptyMessageDelayed(1, 1000);
         mContext.startService(intent);
     }
 

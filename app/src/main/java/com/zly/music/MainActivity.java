@@ -13,7 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Button;
+import android.widget.ImageView;
 
 import com.zly.music.adapter.SelectPagerAdapter;
 import com.zly.music.fragment.NativeMusicFragment;
@@ -41,12 +41,13 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.pager)
     public ViewPager mViewPager;
 
+    @BindView(R.id.btn_play_control_start)
+    public ImageView mStart;
+
     private List<Fragment> mListFragment = new ArrayList<Fragment>();
     private SelectPagerAdapter mAdapter;
     private PermissionManager mPermissionManager;
-
-    private Button button;
-
+    private MediaPlayerManager mMediaPlayerManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,7 +154,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
     }
 
     @Override

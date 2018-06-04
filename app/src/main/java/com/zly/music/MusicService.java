@@ -10,9 +10,12 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 
-import com.zly.music.bean.MusicData;
+import com.zly.music.fragment.NativeMusicFragment;
 import com.zly.music.listener.PlaybackInfoListener;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.List;
 
 /**
@@ -45,6 +48,7 @@ public class MusicService extends MediaBrowserServiceCompat {
 
             mMediaSessionCompat.setActive(true);
             setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
+            mMediaPlayerManager.play();
         }
 
         @Override
@@ -130,7 +134,7 @@ public class MusicService extends MediaBrowserServiceCompat {
         initMediaSession();
 //        initNoisyReceiver();
 
-        mMediaPlayerManager = new MediaPlayerManager(MusicService.this, new MediaPlayerListener());
+        mMediaPlayerManager = MediaPlayerManager.getInstance(MusicService.this);
         mMediaPlayerManager.initMediaPlayer();
 
         mMediaNotificationManager = MediaNotificationManager.getInstance();
@@ -156,13 +160,18 @@ public class MusicService extends MediaBrowserServiceCompat {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        int type = intent.getIntExtra("type", -1);
-        Log.d(TAG, "zly --> onStartCommand type:" + type);
-        if (0 == type) {
-            int musicId = intent.getLongExtra("data");
-            mMediaPlayerManager.addMusicToList(musicId);
-        }
+        if (null != intent) {
+            int type = intent.getIntExtra("type", -1);
+            long musicId = intent.getLongExtra("data", 0L);
 
+            Log.d(TAG, "zly --> onStartCommand type:" + type + " musicid:" + musicId);
+
+            if (NativeMusicFragment.TYPE_ADD_MUSIC == type) {
+                mMediaPlayerManager.addMusicToList(musicId);
+            } else if (NativeMusicFragment.TYPE_DELETE_MUSIC == type) {
+                mMediaPlayerManager.removeMusicToList(musicId);
+            }
+        }
         return super.onStartCommand(intent, flags, startId);
     }
 

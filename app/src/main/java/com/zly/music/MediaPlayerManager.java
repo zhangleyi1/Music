@@ -13,12 +13,17 @@ import android.os.SystemClock;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.util.Log;
 
 import com.zly.music.bean.MusicData;
 import com.zly.music.listener.PlaybackInfoListener;
+import com.zly.music.utils.MusicUtils;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by Administrator on 2018/5/29.
@@ -30,13 +35,13 @@ public class MediaPlayerManager implements AudioManager.OnAudioFocusChangeListen
      *
      */
     // 上下文对象
-    private final Context mContext;
+    private Context mContext;
     // 音频播放器MediaPlayer
     private MediaPlayer mMediaPlayer;
     // 播放信息回调
     private PlaybackInfoListener mPlaybackInfoListener;
     private List<Long> mPlayList = new LinkedList<Long>();
-
+    private static MediaPlayerManager mMediaPlayerManager;
     /**
      *
      */
@@ -53,19 +58,25 @@ public class MediaPlayerManager implements AudioManager.OnAudioFocusChangeListen
     // Work-around for a MediaPlayer bug related to the behavior of MediaPlayer.seekTo()
     // while not playing.
     private int mSeekWhileNotPlaying = -1;
+    private int mCurrentPlayingPosition = 0;
 
 
     /**
      * 构造方法
      *
      * @param context
-     * @param listener
      */
-    public MediaPlayerManager(Context context, PlaybackInfoListener listener) {
+    public MediaPlayerManager(Context context) {
         // 上下文对象
         mContext = context.getApplicationContext();
         // 播放信息回调
-        mPlaybackInfoListener = listener;
+    }
+
+    public static MediaPlayerManager getInstance(Context context) {
+        if (null == mMediaPlayerManager) {
+            mMediaPlayerManager = new MediaPlayerManager(context);
+        }
+        return mMediaPlayerManager;
     }
 
     // Implements PlaybackControl.
@@ -89,6 +100,11 @@ public class MediaPlayerManager implements AudioManager.OnAudioFocusChangeListen
 
     protected void onPlay() {
         if (mMediaPlayer != null && !mMediaPlayer.isPlaying()) {
+            try {
+                mMediaPlayer.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             mMediaPlayer.start();
             setNewState(PlaybackStateCompat.STATE_PLAYING);
         }
@@ -163,15 +179,23 @@ public class MediaPlayerManager implements AudioManager.OnAudioFocusChangeListen
     public void addMusicToList(long id) {
         Long sId = Long.valueOf(id);
         mPlayList.add(sId);
+        Log.d(TAG, "zly --> addMusicToList.");
+        MusicData music = MusicUtils.getAddMusicData(mContext, id);
+        if (null != music) {
+            MusicUtils.setMusic(String.valueOf(id), music);
+        }
     }
 
-    public void removeMusicToList(MusicData music) {
+    public void removeMusicToList(long id) {
         for (int i = 0; i < mPlayList.size(); i++) {
-            if (mPlayList.get(i).equals(music)) {
+            if (mPlayList.get(i).equals(id)) {
                 mPlayList.remove(i);
                 break;
             }
         }
+        Log.d(TAG, "zly --> removeMusicToList.");
+        MusicData music = MusicUtils.getAddMusicData(mContext, id);
+        MusicUtils.removeMusic(String.valueOf(id));
     }
 
     /**
@@ -225,10 +249,19 @@ public class MediaPlayerManager implements AudioManager.OnAudioFocusChangeListen
         play();
     }
 
-    public final void play() {
+    public void play() {
 //        if (mAudioFocusHelper.requestAudioFocus()) {
 //            registerAudioNoisyReceiver();
-            onPlay();
+        try {
+            String path = MusicUtils.getMusicPath(mCurrentPlayingPosition);
+            Log.d(TAG, "zly --> path:" + path);
+            mMediaPlayer.setDataSource(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d(TAG, "zly --> play() set dataSource failed.");
+        }
+
+        onPlay();
 //        }
     }
 
