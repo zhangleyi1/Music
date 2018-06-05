@@ -8,8 +8,10 @@ import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -23,7 +25,6 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by Administrator on 2018/5/29.
@@ -31,9 +32,6 @@ import static android.content.ContentValues.TAG;
 
 public class MediaPlayerManager implements AudioManager.OnAudioFocusChangeListener {
 
-    /**
-     *
-     */
     // 上下文对象
     private Context mContext;
     // 音频播放器MediaPlayer
@@ -42,6 +40,8 @@ public class MediaPlayerManager implements AudioManager.OnAudioFocusChangeListen
     private PlaybackInfoListener mPlaybackInfoListener;
     private List<Long> mPlayList = new LinkedList<Long>();
     private static MediaPlayerManager mMediaPlayerManager;
+    private static String TAG = "MediaPlayerManager";
+
     /**
      *
      */
@@ -69,6 +69,7 @@ public class MediaPlayerManager implements AudioManager.OnAudioFocusChangeListen
     public MediaPlayerManager(Context context) {
         // 上下文对象
         mContext = context.getApplicationContext();
+//        initializeMediaPlayer();
         // 播放信息回调
     }
 
@@ -77,6 +78,10 @@ public class MediaPlayerManager implements AudioManager.OnAudioFocusChangeListen
             mMediaPlayerManager = new MediaPlayerManager(context);
         }
         return mMediaPlayerManager;
+    }
+
+    public void registerListener(PlaybackInfoListener listener) {
+        mPlaybackInfoListener = listener;
     }
 
     // Implements PlaybackControl.
@@ -99,11 +104,13 @@ public class MediaPlayerManager implements AudioManager.OnAudioFocusChangeListen
     }
 
     protected void onPlay() {
+        Log.d(TAG, "zly --> onPlay mMediaPlayer:" + (mMediaPlayer != null) + " isPlaying:" +  mMediaPlayer.isPlaying());
         if (mMediaPlayer != null && !mMediaPlayer.isPlaying()) {
             try {
                 mMediaPlayer.prepare();
             } catch (IOException e) {
                 e.printStackTrace();
+
             }
             mMediaPlayer.start();
             setNewState(PlaybackStateCompat.STATE_PLAYING);
@@ -373,6 +380,7 @@ public class MediaPlayerManager implements AudioManager.OnAudioFocusChangeListen
     };
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private boolean successfullyRetrievedAudioFocus() {
         AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
 
@@ -393,6 +401,7 @@ public class MediaPlayerManager implements AudioManager.OnAudioFocusChangeListen
         return result == AudioManager.AUDIOFOCUS_GAIN;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void releaseFocus() {
         AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
 

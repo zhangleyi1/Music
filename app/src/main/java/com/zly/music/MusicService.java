@@ -136,7 +136,7 @@ public class MusicService extends MediaBrowserServiceCompat {
 
         mMediaPlayerManager = MediaPlayerManager.getInstance(MusicService.this);
         mMediaPlayerManager.initMediaPlayer();
-
+        mMediaPlayerManager.registerListener(new MediaPlayerListener());
         mMediaNotificationManager = MediaNotificationManager.getInstance();
 
     }
